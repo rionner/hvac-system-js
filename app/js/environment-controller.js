@@ -1,14 +1,6 @@
-window.helloText = function() {
-  return 'Hello, World!';
-};
+EnvironmentController = function() {
+  this.tick = function() {
 
-window.hello = function() {
-  html = JST['app/templates/hello.us']({text: helloText()});
-  document.body.innerHTML += html;
+  };
+  return this;
 };
-
-if(window.addEventListener) {
-  window.addEventListener('DOMContentLoaded', hello, false);
-} else {
-  window.attachEvent('onload', hello);
-}
