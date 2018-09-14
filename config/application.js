@@ -14,6 +14,11 @@
 module.exports = function(lineman) {
   //Override application configuration here. Common examples follow in the comments.
   return {
+    jshint: {
+      options: {
+        esversion: 6
+      }
+    }
 
     // API Proxying
     //

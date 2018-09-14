@@ -62,7 +62,7 @@ EnvironmentController = function(hvac) {
   };
 
   this.isSleeping = function() {
-    return this._sleepRemaining != 0;
+    return this._sleepRemaining !== 0;
   };
 
   this.sleepAnotherMinute = function() {
@@ -70,7 +70,7 @@ EnvironmentController = function(hvac) {
   };
 
   this.wasHeating = function() {
-    return this._previousTemp != -Number.MAX_SAFE_INTEGER &&
+    return this._previousTemp !== -Number.MAX_SAFE_INTEGER &&
         this._previousTemp < MINIMUM_TEMP;
   };
 
