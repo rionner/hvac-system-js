@@ -1,12 +1,12 @@
 # My Lineman Application
 
-Run app: npm start
+Run app: `npm start`
 
 The app will be running at localhost:8000
 
-Run specs in CI: npm test
+Run specs in CI: `npm test`
 
-Run continuous specs: npm run spec
+Run continuous specs: `npm run spec` will start a continuous tester but will not automatically recompile the javascript on changes. For that you should open a second terminal and simultaneously run `npm start`.
 
 ## Structure
 
