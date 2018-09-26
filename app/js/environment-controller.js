@@ -10,11 +10,10 @@ class EnvironmentController {
 	}
 
 	checkTimer() {
-		if (this.timer > 5) {
-			this.timer = 0;
-		} else {
-			this.timer += 1;
+		if (this.timer > 0) {
+			this.timer -= 1;
 		}
+
 		return this.timer;
 	}
 
@@ -90,6 +89,44 @@ class MessageSystemController {
 
 	getCurrentTemp() {
 		return this.hvac.temp();
+	}
+}
+
+class HTTPMessageSystemController {
+	constructor(time) {
+		this.time = time;
+		// this.xhr = sinon.useFakeXMLHttpRequest;
+	}
+
+	turnAllSystemsOff() {
+		// write fake post request with sinon?
+		// this.hvac.heat(false);
+		// this.hvac.cool(false);
+		// this.hvac.fan(false);
+	}
+
+	turnCoolingSystemOn() {
+		// write fake post request with sinon?
+		// this.hvac.cool(true);
+		// this.turnFanOn();
+	}
+
+	turnHeatingSystemOn() {
+		// write fake post request with sinon?
+		// this.hvac.heat(true);
+		// this.turnFanOn();
+	}
+
+	turnFanOn() {
+		// write fake post request with sinon?
+		// if(this.time === 0) {
+		// 	this.hvac.fan(true);
+		// }
+	}
+
+	getCurrentTemp() {
+		// write fake get request with sinon?
+		// return this.hvac.temp();
 	}
 }
 

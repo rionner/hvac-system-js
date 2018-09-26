@@ -24,16 +24,30 @@ describe("environment controller", function(){
 		spyGetCurrentTemp = sinon.spy(messageSystem, "getCurrentTemp");
 	});
 
-	it("timer tracks up to five seconds", () => {
+	it("timer counts down to 0 seconds", () => {
 		let environment = new EnvironmentController(messageSystem);
 
-		for(var i = 1; i <= 5; i++) {
-			environment.tick();
-
-			expect(environment.timer).toEqual(i);
-		}
-
 		environment.timer = 6;
+		environment.tick();
+
+		expect(environment.timer).toEqual(5);
+
+		environment.tick();
+
+		expect(environment.timer).toEqual(4);
+
+		environment.tick();
+
+		expect(environment.timer).toEqual(3);
+
+		environment.tick();
+
+		expect(environment.timer).toEqual(2);
+
+		environment.tick();
+
+		expect(environment.timer).toEqual(1);
+
 		environment.tick();
 
 		expect(environment.timer).toEqual(0);
@@ -181,20 +195,4 @@ describe("environment controller", function(){
 
 		expect(spyTurnHeatingSystemOn.calledOnce).toBeTruthy();
 	});
-	
-	xit("cool is off if temp is between 65 and 75", () => {});
-
-	xit("fan is off if temp is between 65 and 75", () => {});
-
-	xit("heat is on if temp is at or below 65", () => {});
-
-	xit("cool is on if temp is at or above 75", () => {});
-
-	xit("fan is on for heat 3 min after cool is turned off", () => {});
-
-	xit("fan truns on for cool 5 min after heat is turned off", () => {});
-
-	xit("should request the temperature", () => {});
-
-	xit("should turn off all systems", () => {});
 });
