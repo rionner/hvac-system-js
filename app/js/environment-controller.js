@@ -1,7 +1,12 @@
 class EnvironmentController {
-	constructor(hvac) {
-		this.hvac = hvac;
+	constructor(messageSystem) {
+		this.messageSystem = messageSystem;
 		this.timer = 0;
+		this.maximumTemperature = 75;
+		this.minimumTemperature = 65;
+		this.turnAllSystemsOff = messageSystem.turnAllSystemsOff;
+		this.turnHeatingSystemOn = messageSystem.turnHeatingSystemOn;
+		this.turnCoolingSystemOn = messageSystem.turnCoolingSystemOn;
 	}
 
 	checkTimer() {
@@ -13,43 +18,105 @@ class EnvironmentController {
 		return this.timer;
 	}
 
-	allSystemsOff() {
-		this.timer = 0;
+	readCurrentTemperature() {
+		return this.messageSystem.getCurrentTemp();
+	}
+
+	temperatureIsBelowMaximum() {
+		return this.readCurrentTemperature() < this.maximumTemperature;
+	}
+
+	temperatureIsAboveMinimum() {
+		return this.readCurrentTemperature() > this.minimumTemperature;
+	}
+
+	temperatureIsInSetRange() {
+		return this.temperatureIsAboveMinimum() && this.temperatureIsBelowMaximum();
+	}
+
+	temperatureIsAboveMaximum() {
+		return this.readCurrentTemperature() > this.maximumTemperature;
+	}
+
+	temperatureIsBelowMinimum() {
+		return this.readCurrentTemperature() < this.minimumTemperature;
+	}
+
+	temperatureIsNotInSetRange() {
+		return this.temperatureIsAboveMaximum() || this.temperatureIsBelowMinimum();
+	}
+
+	tick() {
+		this.checkTimer();
+
+		if(this.temperatureIsInSetRange()) {
+			this.timer = 5;
+			this.turnAllSystemsOff();
+		} else if(this.temperatureIsBelowMinimum()) {
+			this.turnHeatingSystemOn();
+		} else if(this.temperatureIsAboveMaximum()) {
+			this.turnCoolingSystemOn();
+		}
+	}
+}
+
+class MessageSystemController {
+	constructor(hvac, time) {
+		this.hvac = hvac;
+		this.time = time;
+	}
+
+	turnAllSystemsOff() {
 		this.hvac.heat(false);
 		this.hvac.cool(false);
 		this.hvac.fan(false);
 	}
 
-	coolingSystemOn() {
+	turnCoolingSystemOn() {
 		this.hvac.cool(true);
-		if(this.timer > 5) {
-			this.hvac.fan(true);
+		if(this.time > 5) {
+			this.turnFanOn();
 		}
 	}
 
-	heatingSystemOn() {
+	turnHeatingSystemOn() {
 		this.hvac.heat(true);
-		if(this.timer > 3) {
-			this.hvac.fan(true);
+		if(this.time > 3) {
+			this.turnFanOn();
 		}
 	}
 
-	//called every minute
-	tick() {
-		this.checkTimer();
+	turnFanOn() {
+		this.hvac.fan(true);
+	}
 
-		let temp = this.hvac.temp();
-		let tempInRange = temp > 65 && temp < 75;
-		let tempTooHigh = temp >= 75;
-		let tempTooLow = temp <= 65;
+	getCurrentTemp() {
+		return this.hvac.temp();
+	}
+}
 
-		if(tempInRange) {
-			this.allSystemsOff();
-		} else if(tempTooLow) {
-			this.heatingSystemOn();
-		} else if(tempTooHigh) {
-			this.coolingSystemOn();
-		}
+class HVAC {
+	init() {
+		temperature = 70;
+		heatOn = false;
+		coolOn = false;
+		fanOn = false;
+	}
+	
+	heat(isOn) { 
+		this.heatOn = isOn;
+	}
+
+	cool(isOn) { 
+		this.coolOn = isOn; 
+	}
+
+	fan(isOn) {
+		this.fanOn = isOn;
+	}
+
+	temp() {
+		return this.temperature;
 	}
 }
 

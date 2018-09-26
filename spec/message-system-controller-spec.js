@@ -1,9 +1,10 @@
 describe("message system controller", function(){
 	let HVAC;
+	let time;
 
 	beforeEach(function() {
 		HVAC = {
-			_temp: 70,
+			temperature: 70,
 			heatOn: false,
 			coolOn: false,
 			fanOn: false,
@@ -18,27 +19,92 @@ describe("message system controller", function(){
 				this.fanOn = isOn;
 			},
 			temp() {
-				return this._temp;
+				return this.temperature;
 			},
-		}
-	});
-
-	it("should request the temperature", () => {
-		let messageSystem = new MessageSystemController(HVAC, 0);
-		let methodCalled = false;
-
-		HVAC.temp = () => {
-			return methodCalled = true;
 		};
-		messageSystem.getTemp();
-		expect(methodCalled).toBeTruthy();
+
+		time = 0;
 	});
 
-	it("should turn off all systems", () => {
-		let messageSystem = new MessageSystemController(HVAC);
+	it("turns all systems off", () => {
+		let messageSystem = new MessageSystemController(HVAC, time);
+
 		messageSystem.turnAllSystemsOff();
+
 		expect(HVAC.heatOn).toBeFalsy();
 		expect(HVAC.coolOn).toBeFalsy();
 		expect(HVAC.fanOn).toBeFalsy();
+	});
+
+	it("turns cooling on", () => {
+		let messageSystem = new MessageSystemController(HVAC, time);
+
+		messageSystem.turnAllSystemsOff();
+		messageSystem.turnCoolingSystemOn();
+
+		expect(HVAC.coolOn).toBeTruthy();
+		expect(HVAC.heatOn).toBeFalsy();
+		expect(HVAC.fanOn).toBeFalsy();
+	});
+
+	it("turns heating on", () => {
+		let messageSystem = new MessageSystemController(HVAC, time);
+
+		messageSystem.turnAllSystemsOff();
+		messageSystem.turnHeatingSystemOn();
+
+		expect(HVAC.coolOn).toBeFalsy();
+		expect(HVAC.heatOn).toBeTruthy();
+		expect(HVAC.fanOn).toBeFalsy();
+	});
+
+	it("fan turns on for cool 5 seconds after heat is turned off", () => {
+		let messageSystem = new MessageSystemController(HVAC, time);
+
+		messageSystem.turnAllSystemsOff();
+
+		for(var i = 0; i <= 5; i++) {
+			messageSystem.time = i;
+			messageSystem.turnCoolingSystemOn();
+
+			expect(HVAC.coolOn).toBeTruthy();
+			expect(HVAC.heatOn).toBeFalsy();
+			expect(HVAC.fanOn).toBeFalsy();	
+		}
+
+		messageSystem.time = 6;
+		messageSystem.turnCoolingSystemOn();
+
+		expect(HVAC.coolOn).toBeTruthy();
+		expect(HVAC.heatOn).toBeFalsy();
+		expect(HVAC.fanOn).toBeTruthy();
+	});
+
+	it("fan is on for heat 3 seconds after cool is turned off", () => {
+		let messageSystem = new MessageSystemController(HVAC, time);
+
+		messageSystem.turnAllSystemsOff();
+
+		for(var i = 0; i <= 3; i++) {
+			messageSystem.time = i;
+			messageSystem.turnHeatingSystemOn();
+
+			expect(HVAC.coolOn).toBeFalsy();
+			expect(HVAC.heatOn).toBeTruthy();
+			expect(HVAC.fanOn).toBeFalsy();
+		}
+
+		messageSystem.time = 4;
+		messageSystem.turnHeatingSystemOn();
+
+		expect(HVAC.heatOn).toBeTruthy();
+		expect(HVAC.coolOn).toBeFalsy();
+		expect(HVAC.fanOn).toBeTruthy();
+	});
+
+	it("returns the current temperature", () => {
+		let messageSystem = new MessageSystemController(HVAC, time);
+
+		expect(messageSystem.getCurrentTemp()).toEqual(70);
 	});
 });

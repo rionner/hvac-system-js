@@ -1,3 +1,15 @@
-<div class="hello">
-  <%= text %>
-</div>
+<section>
+  <h1>HVAC Status</h1>
+  <br>
+  <h2>Temp</h2>
+  <h3><%= currentTemp %></h3>
+  <br>
+  <h2>Cooling</h2>
+  <h3><% print(coolingOn ? 'On' : 'Off') %></h3>
+  <br>
+  <h2>Heating</h2>
+  <h3><% print(heatingOn ? 'On' : 'Off') %></h3>
+  <br>
+  <h2>Fan</h2>
+  <h3><% print(fanOn ? 'On' : 'Off') %></h3>
+</section>
