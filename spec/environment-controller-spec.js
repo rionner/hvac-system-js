@@ -182,90 +182,19 @@ describe("environment controller", function(){
 		expect(spyTurnHeatingSystemOn.calledOnce).toBeTruthy();
 	});
 	
-	xit("cool is off if temp is between 65 and 75", () => {
-		for(var i = 0; i <= 8; i++) {
-			let environment = new EnvironmentController(messageSystem);
-			HVAC._temp = 66 + i;
-			environment.tick();
-			expect(HVAC.coolOn).toBeFalsy();
-		}
-	});
+	xit("cool is off if temp is between 65 and 75", () => {});
 
-	xit("fan is off if temp is between 65 and 75", () => {
-		for(var i = 0; i <= 8; i++) {
-			let environment = new EnvironmentController(messageSystem);
-			HVAC._temp = 66 + i;
-			environment.tick();
-			expect(HVAC.fanOn).toBeFalsy();
-		}
-	});
+	xit("fan is off if temp is between 65 and 75", () => {});
 
-	xit("heat is on if temp is at or below 65", () => {
-		for(var i = 0; i <= 5; i++) {
-			let environment = new EnvironmentController(messageSystem);
-			HVAC._temp = 60 + i;
-			environment.tick();
-			expect(HVAC.heatOn).toBeTruthy();
-		}
-	});
+	xit("heat is on if temp is at or below 65", () => {});
 
-	xit("cool is on if temp is at or above 75", () => {
-		for(var i = 0; i <= 5; i++) {
-			let environment = new EnvironmentController(messageSystem);
-			HVAC._temp = 75 + i;
-			environment.tick();
-			expect(HVAC.coolOn).toBeTruthy();
-		}
-	});
+	xit("cool is on if temp is at or above 75", () => {});
 
-	xit("fan is on for heat 3 min after cool is turned off", () => {
-		let environment = new EnvironmentController(messageSystem);
-		HVAC._temp = 60;
+	xit("fan is on for heat 3 min after cool is turned off", () => {});
 
-		for(var i = 0; i <= 3; i++) {
-			expect(environment.timer).toEqual(i);
-			expect(messageSystem.fanOn).toBeFalsy();
-			environment.tick();
-		}
+	xit("fan truns on for cool 5 min after heat is turned off", () => {});
 
-		environment.tick();
-		expect(messageSystem.coolOn).toBeFalsy();
-		expect(messageSystem.heatOn).toBeTruthy();
-		expect(messageSystem.fanOn).toBeTruthy();
-	});
+	xit("should request the temperature", () => {});
 
-	xit("fan truns on for cool 5 min after heat is turned off", () => {
-		let environment = new EnvironmentController(messageSystem);
-		messageSystem._temp = 76;
-
-		for(var i = 0; i <=5; i++) {
-			expect(environment.timer).toEqual(i);
-			expect(HVAC.fanOn).toBeFalsy();
-			environment.tick();
-		}
-
-		environment.tick();
-		expect(messageSystem.heatOn).toBeFalsy();
-		expect(messageSystem.coolOn).toBeTruthy();
-		expect(messageSystem.fanOn).toBeTruthy();
-	});
-
-	xit("should request the temperature", () => {
-		let environment = new EnvironmentController(messageSystem);
-		let methodCalled = false;
-
-		messageSystem.temp = () => {
-			return methodCalled = true;
-		};
-		environment.getTemp();
-		expect(methodCalled).toBeTruthy();
-	});
-
-	xit("should turn off all systems", () => {
-		let environment = new EnvironmentController(messageSystem);
-		environment.turnAllSystemsOff();
-		expect(messageSystem.heatOn).toBeFalsy();
-		expect(messageSystem.coolOn).toBeFalsy();
-		expect(messageSystem.fanOn).toBeFalsy();
-	});
+	xit("should turn off all systems", () => {});
 });
