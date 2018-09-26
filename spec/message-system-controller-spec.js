@@ -44,7 +44,7 @@ describe("message system controller", function(){
 
 		expect(HVAC.coolOn).toBeTruthy();
 		expect(HVAC.heatOn).toBeFalsy();
-		expect(HVAC.fanOn).toBeFalsy();
+		expect(HVAC.fanOn).toBeTruthy();
 	});
 
 	it("turns heating on", () => {
@@ -55,24 +55,21 @@ describe("message system controller", function(){
 
 		expect(HVAC.coolOn).toBeFalsy();
 		expect(HVAC.heatOn).toBeTruthy();
-		expect(HVAC.fanOn).toBeFalsy();
+		expect(HVAC.fanOn).toBeTruthy();
 	});
 
-	it("fan turns on for cool 5 seconds after heat is turned off", () => {
+	it("fan can turn on 5 seconds after heat is turned off", () => {
 		let messageSystem = new MessageSystemController(HVAC, time);
 
 		messageSystem.turnAllSystemsOff();
+		messageSystem.time = 5;
+		messageSystem.turnCoolingSystemOn();
 
-		for(var i = 0; i <= 5; i++) {
-			messageSystem.time = i;
-			messageSystem.turnCoolingSystemOn();
+		expect(HVAC.coolOn).toBeTruthy();
+		expect(HVAC.heatOn).toBeFalsy();
+		expect(HVAC.fanOn).toBeFalsy();
 
-			expect(HVAC.coolOn).toBeTruthy();
-			expect(HVAC.heatOn).toBeFalsy();
-			expect(HVAC.fanOn).toBeFalsy();	
-		}
-
-		messageSystem.time = 6;
+		messageSystem.time = 0;
 		messageSystem.turnCoolingSystemOn();
 
 		expect(HVAC.coolOn).toBeTruthy();
@@ -80,21 +77,18 @@ describe("message system controller", function(){
 		expect(HVAC.fanOn).toBeTruthy();
 	});
 
-	it("fan is on for heat 3 seconds after cool is turned off", () => {
+	it("fan can turn on 3 seconds after cool is turned off", () => {
 		let messageSystem = new MessageSystemController(HVAC, time);
 
 		messageSystem.turnAllSystemsOff();
+		messageSystem.time = 3;
+		messageSystem.turnHeatingSystemOn();
 
-		for(var i = 0; i <= 3; i++) {
-			messageSystem.time = i;
-			messageSystem.turnHeatingSystemOn();
+		expect(HVAC.coolOn).toBeFalsy();
+		expect(HVAC.heatOn).toBeTruthy();
+		expect(HVAC.fanOn).toBeFalsy();
 
-			expect(HVAC.coolOn).toBeFalsy();
-			expect(HVAC.heatOn).toBeTruthy();
-			expect(HVAC.fanOn).toBeFalsy();
-		}
-
-		messageSystem.time = 4;
+		messageSystem.time = 0;
 		messageSystem.turnHeatingSystemOn();
 
 		expect(HVAC.heatOn).toBeTruthy();

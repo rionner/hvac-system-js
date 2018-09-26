@@ -74,20 +74,18 @@ class MessageSystemController {
 
 	turnCoolingSystemOn() {
 		this.hvac.cool(true);
-		if(this.time > 5) {
-			this.turnFanOn();
-		}
+		this.turnFanOn();
 	}
 
 	turnHeatingSystemOn() {
 		this.hvac.heat(true);
-		if(this.time > 3) {
-			this.turnFanOn();
-		}
+		this.turnFanOn();
 	}
 
 	turnFanOn() {
-		this.hvac.fan(true);
+		if(this.time === 0) {
+			this.hvac.fan(true);
+		}
 	}
 
 	getCurrentTemp() {
